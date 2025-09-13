@@ -32,6 +32,20 @@ func (r *Root) EscapedDatamodel() string {
 	return strings.ReplaceAll(r.Datamodel, "`", "'")
 }
 
+// FilteredDatamodel returns the schema with only the current generator and all non-generator blocks
+func (r *Root) FilteredDatamodel() string {
+	parser := NewSchemaParser(r.Datamodel)
+	filtered, err := parser.FilterByGenerator(string(r.Generator.Name))
+	if err != nil {
+		// Log warning and return escaped original datamodel for backward compatibility
+		logger.Debug.Printf("Warning: Failed to filter schema for generator '%s': %v. Using original schema.", r.Generator.Name, err)
+		return r.EscapedDatamodel()
+	}
+
+	// Apply the same escaping as EscapedDatamodel
+	return strings.ReplaceAll(filtered, "`", "'")
+}
+
 func (r *Root) GetDatasourcesJSON() string {
 	ds := r.Datasources[0]
 

@@ -2,7 +2,7 @@
 
 const datasources = `{{ .GetDatasourcesJSON }}`
 
-const schema = `{{ .EscapedDatamodel }}`
+const schema = `{{ .FilteredDatamodel }}`
 const schemaDatasourceURL = "{{ .GetSanitizedDatasourceURL }}"
 const schemaEnvVarName = "{{ (index .Datasources 0).URL.FromEnvVar }}"
 
